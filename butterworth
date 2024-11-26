@@ -1,0 +1,106 @@
+low pass filter
+
+// Clear workspace and command window
+clear;
+clc;
+close;
+// Define symbolic variables
+s = poly(0, 's'); // Analog domain variable
+z = poly(0, 'z'); // Digital domain variable
+// Specifications for the analog filter
+Omegac = 0.2 * %pi; // Cutoff frequency in radians
+H = Omegac / (s + Omegac); // Analog Butterworth Filter Transfer Function
+// Sampling period
+T = 1; // Sampling period T = 1 second
+// Bilinear transformation to convert analog to digital filter
+Hz = horner(H, (2 / T) * ((z - 1) / (z + 1))); // Digital transfer function
+// Frequency response computation
+[Hw, W] = frmag(Hz(2), Hz(3), 512); // Magnitude response computation
+W = linspace(0, %pi, 512); // Frequency vector
+// Plotting the magnitude response
+plot(W / %pi, Hw);
+a = gca();
+a.thickness = 3;
+a.foreground = 1;
+a.font_style = 9;
+xgrid(1);
+xtitle('Magnitude Response of Single Pole LPF Filter Cutoff Frequency = 0.2*pi', 'Digital Frequency --->', 'Magnitude');
+// Display digital filter transfer function
+disp("Hz", Hz);
+
+highpass filter
+
+clear;
+clc;
+close;
+s = poly(0,'s');
+Omegac = 0.2*%pi;
+H = Omegac/(s+Omegac);
+T =1;//Sampling period T = 1 Second
+z = poly(0,'z');
+Hz_LPF = horner(H,(2/T)*((z-1)/(z+1)));
+alpha = -(cos((Omegac+Omegac)/2))/(cos((Omegac-Omegac)/2));
+HZ_HPF=horner(Hz_LPF,-(z+alpha)/(1+alpha*z))
+HW =frmag(HZ_HPF(2),HZ_HPF(3),512);
+W = 0:%pi/511:%pi;
+plot(W/%pi,HW)
+a=gca();
+a.thickness = 3;
+a.foreground = 1;
+a.font_style = 9; 
+xgrid(1)
+xtitle('Magnitude Response of Single pole HPF Filter Cutoff frequency = 0.2*pi','Digital Frequency---&gt;','Magnitude');
+disp(“HZ_HPF”,HZ_HPF);
+
+band pass filter
+
+clear;
+clc;
+close;
+omegaP = 0.2*%pi;
+omegaL = (2/5)*%pi; 
+omegaU = (3/5)*%pi; 
+z=poly(0,'z');
+H_LPF = (0.245)(1+(z^-1))/(1-0.509(z^-1))
+alpha = (cos((omegaU+omegaL)/2)/cos((omegaU-omegaL)/2));
+k = (cos((omegaU - omegaL)/2)/sin((omegaU - omegaL)/2))*tan(omegaP/2);
+NUM =-((z^2)-((2*alpha*k/(k+1))*z)+((k-1)/(k+1)));
+DEN = (1-((2*alpha*k/(k+1))z)+(((k-1)/(k+1))(z^2)));
+HZ_BPF=horner(H_LPF,NUM/DEN)
+disp(HZ_BPF,'Digital BPF IIR Filter H(Z)= ')
+HW =frmag(HZ_BPF(2),HZ_BPF(3),512);
+W = 0:%pi/511:%pi;
+plot(W/%pi,HW)
+a=gca();
+a.thickness = 3;
+a.foreground = 1;
+a.font_style = 9; 
+xgrid(1)
+xtitle('Magnitude Response of BPF Filter', 'Digital Frequency--->','Magnitude');
+ Disp(“HZ_BPF”,HZ_BPF);
+
+bandreject filter(or)bandstop filter
+
+clear;
+clc;
+close;
+omegaP = 0.2*%pi;
+omegaL = (2/5)*%pi; 
+omegaU = (3/5)*%pi; 
+z=poly(0,'z');
+H_LPF = (0.245)(1+(z^-1))/(1-0.509(z^-1))
+alpha = (cos((omegaU+omegaL)/2)/cos((omegaU-omegaL)/2));
+k = tan((omegaU - omegaL)/2)*tan(omegaP/2);
+NUM =((z^2)-((2*alpha/(1+k))*z)+((1-k)/(1+k)));
+DEN = (1-((2*alpha/(1+k))z)+(((1-k)/(1+k))(z^2)));
+HZ_BSF=horner(H_LPF,NUM/DEN)
+HW =frmag(HZ_BSF(2),HZ_BSF(3),512);
+W = 0:%pi/511:%pi;
+plot(W/%pi,HW)
+a=gca();
+a.thickness = 3;
+a.foreground = 1;
+a.font_style = 9; 
+xgrid(1)
+xtitle('Magnitude Response of BSF Filter','Digital Frequency--->','Magnitude');
+Disp(“HZ_BSF”,HZ_BSF);
