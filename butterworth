@@ -1,4 +1,4 @@
-low pass filter
+//low pass filter
 
 // Clear workspace and command window
 clear;
@@ -28,7 +28,7 @@ xtitle('Magnitude Response of Single Pole LPF Filter Cutoff Frequency = 0.2*pi',
 // Display digital filter transfer function
 disp("Hz", Hz);
 
-highpass filter
+//highpass filter
 
 clear;
 clc;
@@ -52,7 +52,7 @@ xgrid(1)
 xtitle('Magnitude Response of Single pole HPF Filter Cutoff frequency = 0.2*pi','Digital Frequency---&gt;','Magnitude');
 disp(“HZ_HPF”,HZ_HPF);
 
-band pass filter
+//band pass filter
 
 clear;
 clc;
@@ -79,7 +79,7 @@ xgrid(1)
 xtitle('Magnitude Response of BPF Filter', 'Digital Frequency--->','Magnitude');
  Disp(“HZ_BPF”,HZ_BPF);
 
-bandreject filter(or)bandstop filter
+//bandreject filter(or)bandstop filter
 
 clear;
 clc;
